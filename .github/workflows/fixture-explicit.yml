@@ -1,6 +1,6 @@
 name: Manual explicit fixture
 on: workflow_dispatch
-permissions: {}
+permissions: {contents: read}
 jobs:
   test:
     runs-on: ubuntu-latest
