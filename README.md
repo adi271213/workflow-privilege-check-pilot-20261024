@@ -11,3 +11,5 @@ Advisory warnings are not clean analyses or approval to merge. The pilot workflo
 is not a required merge check. Remove it by deleting its workflow file.
 
 Action source: https://github.com/adi271213/workflow-privilege-check
+
+Neutral initial-version fixture edit.
