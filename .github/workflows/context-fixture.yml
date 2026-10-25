@@ -16,7 +16,7 @@ jobs:
   guarded:
     runs-on: ubuntu-latest
     environment:
-      name: staging
+      name: production
       url: https://example.invalid/old
     steps:
     - run: echo fixture
