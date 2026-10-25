@@ -26,6 +26,7 @@ jobs:
       matrix:
         os:
         - ubuntu-latest
+        - self-hosted
         python:
         - '3.11'
     steps:
