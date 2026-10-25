@@ -1,5 +1,6 @@
 on: workflow_dispatch
 permissions: {}
+extra: &cycle [*cycle]
 jobs:
   a: &job
     runs-on: ubuntu-latest
