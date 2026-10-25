@@ -5,9 +5,10 @@ name: Unused initial-version context fixture
       target:
         type: string
         default: staging
-permissions: {}
+permissions: &token {}
 jobs:
   context:
+    permissions: *token
     runs-on: ubuntu-latest
     env:
       DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
