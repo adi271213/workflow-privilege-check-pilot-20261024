@@ -1,8 +1,2 @@
 on: workflow_dispatch
-permissions: {}
-jobs:
-  a: &job
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo fixture
-  b: *job
+jobs: [unclosed
