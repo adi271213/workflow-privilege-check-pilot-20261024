@@ -5,7 +5,6 @@ name: Unused initial-version context fixture
       target:
         type: string
         default: staging
-permissions: {}
 jobs:
   context:
     runs-on: ubuntu-latest
