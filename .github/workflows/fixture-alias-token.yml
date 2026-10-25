@@ -1,5 +1,5 @@
 on: workflow_dispatch
-permissions: &token {}
+permissions: &token {id-token: write}
 jobs:
   a: &job
     permissions: *token
