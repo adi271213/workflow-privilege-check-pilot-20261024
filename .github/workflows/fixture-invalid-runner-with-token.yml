@@ -1,7 +1,9 @@
 'on': workflow_dispatch
-permissions: {}
+permissions:
+  contents: write
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on:
+      group: 7
     steps:
     - run: echo unused
