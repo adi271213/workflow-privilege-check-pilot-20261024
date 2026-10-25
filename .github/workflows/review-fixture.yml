@@ -1,0 +1,8 @@
+name: Manual review fixture
+on: [workflow_dispatch, discussion_comment]
+permissions: {}
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo fixture
