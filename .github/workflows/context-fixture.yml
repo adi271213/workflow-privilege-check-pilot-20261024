@@ -5,6 +5,10 @@ name: Unused initial-version context fixture
       target:
         type: string
         default: staging
+  issue_comment: null
+  issues: null
+  discussion: null
+  discussion_comment: null
 permissions: {}
 jobs:
   context:
