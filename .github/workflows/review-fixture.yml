@@ -1,0 +1,9 @@
+name: Manual review fixture
+on: workflow_dispatch
+permissions: &p {id-token: write}
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions: *p
+    steps:
+      - run: echo fixture
