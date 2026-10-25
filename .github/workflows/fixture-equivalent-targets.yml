@@ -11,7 +11,9 @@ jobs:
     strategy:
       matrix:
         include:
-        - pool: prod
-          arch: x64
         - pool: test
           arch: arm64
+          python: '3.14'
+        - pool: prod
+          arch: x64
+          python: '3.14'
