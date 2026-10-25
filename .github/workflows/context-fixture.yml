@@ -15,9 +15,6 @@ jobs:
     - run: echo fixture
   guarded:
     runs-on: ubuntu-latest
-    environment:
-      name: staging
-      url: https://example.invalid/old
     steps:
     - run: echo fixture
   matrix:
