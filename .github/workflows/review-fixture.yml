@@ -1,0 +1,3 @@
+name: Deliberate parser-error fixture
+on: workflow_dispatch
+jobs: [unclosed
