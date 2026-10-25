@@ -1,10 +1,4 @@
 name: Workflow privilege review (advisory)
-true:
-  pull_request:
-    types:
-    - opened
-    - synchronize
-    - reopened
 permissions:
   contents: read
 concurrency:
@@ -118,3 +112,9 @@ jobs:
         \    assert Counter(f['rule'] for f in report['findings'])==Counter(expected['rules'])\n    assert (report.get('base')\
         \ or '',report.get('head') or '')==(env['BASE'],env['HEAD'])\n    assert Path(env['SUMMARY']).is_file()\n    print('WPC_ALIAS_RESULT='+json.dumps({'case':case,'mode':mode,'analysis':env['STATE'],'review':env['REVIEW'],'findings':int(env['COUNT']),'analysisExit':int(env['EXIT']),'stepOutcome':env['OUTCOME'],'base':env['BASE'],'head':env['HEAD'],'rules':sorted(f['rule']\
         \ for f in report['findings'])}))\nPYCODE\n"
+'on':
+  pull_request:
+    types:
+    - opened
+    - synchronize
+    - reopened
