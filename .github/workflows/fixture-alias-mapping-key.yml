@@ -1,0 +1,5 @@
+on: workflow_dispatch
+key: &key contents
+permissions: {*key: read}
+jobs:
+  a: {runs-on: ubuntu-latest, steps: [{run: echo fixture}]}

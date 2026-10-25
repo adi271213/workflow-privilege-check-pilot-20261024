@@ -1,0 +1,12 @@
+on: workflow_dispatch
+permissions: {}
+jobs:
+  a: &job
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: &os [ubuntu-latest]
+        python: ["3.11", "3.12"]
+    steps:
+      - run: echo fixture
+  b: *job
