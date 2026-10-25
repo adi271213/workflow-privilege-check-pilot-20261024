@@ -3,6 +3,7 @@ permissions: {}
 jobs:
   a: &job
     runs-on: ubuntu-latest
+    environment: ${{ vars.ENVIRONMENT }}
     steps:
       - run: echo fixture
   b: *job
