@@ -1,0 +1,7 @@
+name: Manual review fixture
+on: [workflow_dispatch, issue_comment]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo fixture
