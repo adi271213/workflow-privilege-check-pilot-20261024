@@ -2,6 +2,6 @@
 permissions: {}
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: xcode-27
     steps:
     - run: echo unused
