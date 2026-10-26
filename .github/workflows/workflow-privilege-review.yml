@@ -30,7 +30,7 @@ jobs:
         '
     - name: Report configured changes (advisory)
       id: privilege
-      uses: adi271213/workflow-privilege-check@bd50c23ab5e722413a3901eccc0aac5d2e13e02e
+      uses: adi271213/workflow-privilege-check@edd446b3273f53c5b3fa7cda9d45bc62cfbc8d9f
       with:
         mode: advisory
     - name: Explain the result
@@ -64,7 +64,7 @@ jobs:
     - name: Run candidate in require-complete mode
       id: strict
       continue-on-error: true
-      uses: adi271213/workflow-privilege-check@bd50c23ab5e722413a3901eccc0aac5d2e13e02e
+      uses: adi271213/workflow-privilege-check@edd446b3273f53c5b3fa7cda9d45bc62cfbc8d9f
       with:
         mode: require-complete
     - name: Assert alias cases in both modes
