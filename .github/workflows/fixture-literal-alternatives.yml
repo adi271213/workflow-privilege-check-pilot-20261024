@@ -2,8 +2,11 @@
 permissions: {}
 jobs:
   test:
-    runs-on:
-    - self-hosted
-    - prod
+    runs-on: ${{ matrix.runner }}
     steps:
     - run: echo unused
+    strategy:
+      matrix:
+        runner:
+        - self-hosted
+        - prod
