@@ -1,5 +1,6 @@
 'on': workflow_dispatch
-permissions: {}
+permissions:
+  contents: write
 jobs:
   test:
     runs-on:
@@ -11,7 +12,5 @@ jobs:
     strategy:
       matrix:
         include:
-        - pool: prod
+        - pool: ${{ inputs.pool }}
           arch: x64
-        - pool: test
-          arch: arm64
