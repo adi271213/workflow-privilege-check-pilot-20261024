@@ -1,0 +1,9 @@
+on: workflow_dispatch
+permissions: &token {}
+jobs:
+  a: &job
+    permissions: *token
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo fixture
+  b: *job

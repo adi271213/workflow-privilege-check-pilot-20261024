@@ -1,11 +1,4 @@
-# Advisory workflow-privilege review on pull requests.
-# Checks out the trusted base and fetches the PR head as data; never runs PR code.
-# Pin the reviewed Action to its evaluated full commit SHA.
-# Advisory pilot: keep this job outside required merge checks.
 name: Workflow privilege review (advisory)
-on:
-  pull_request:
-    types: [opened, synchronize, reopened]
 permissions:
   contents: read
 concurrency:
@@ -16,64 +9,107 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 6
     steps:
-      - name: Checkout trusted base
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ github.event.pull_request.base.sha }}
-          fetch-depth: 0
-          persist-credentials: false
-      - name: Fetch proposed head as data
-        env:
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
-        run: |
-          [[ "$PR_NUMBER" =~ ^[0-9]+$ ]]
-          [[ "$EXPECTED_HEAD" =~ ^[0-9a-f]{40}$ ]]
-          git fetch --no-tags origin "refs/pull/$PR_NUMBER/head:refs/remotes/origin/privilege-head"
-          test "$(git rev-parse refs/remotes/origin/privilege-head)" = "$EXPECTED_HEAD"
-      - name: Report configured changes (advisory)
-        id: privilege
-        uses: adi271213/workflow-privilege-check@ed5248238b1f88d06cb76e9bfa6427e09567f743 # v0.0.1
-        with:
-          mode: advisory
-      - name: Explain the result
-        if: always()
-        env:
-          STEP_OUTCOME: ${{ steps.privilege.outcome }}
-          ANALYSIS: ${{ steps.privilege.outputs.analysis-status }}
-          REVIEW: ${{ steps.privilege.outputs.review-status }}
-          FINDINGS: ${{ steps.privilege.outputs.finding-count }}
-          ANALYSIS_EXIT: ${{ steps.privilege.outputs.analysis-exit-code }}
-          REPORT: ${{ steps.privilege.outputs.report-path }}
-          SUMMARY: ${{ steps.privilege.outputs.summary-path }}
-          BASE: ${{ steps.privilege.outputs.base-sha }}
-          HEAD: ${{ steps.privilege.outputs.head-sha }}
-        run: |
-          if [[ "$STEP_OUTCOME" != success ]]; then
-            echo '::error::The Action did not finish reporting. No clean analysis was established; inspect the failed step.'
-            exit 1
-          fi
-          printf 'Analysis: %s; review: %s; findings: %s; analysis exit: %s\n' "$ANALYSIS" "$REVIEW" "$FINDINGS" "$ANALYSIS_EXIT"
-          case "$ANALYSIS/$REVIEW" in
-            complete/none) echo '::notice::No supported configured privilege expansions detected. This is not approval to merge.' ;;
-            complete/suggested|incomplete/suggested|error/suggested) echo '::notice::Human review suggested for the reported configured changes. Read the summary, including any analysis limitations.' ;;
-            incomplete/unknown) echo '::warning::Analysis is incomplete. This is not a clean result; review the summary and missing context.' ;;
-            error/unknown) echo '::warning::Analysis failed. This is not a clean result; review the summary and logs.' ;;
-            *) echo '::error::Unexpected or missing Action outputs. No clean result was established.'; exit 1 ;;
-          esac
-          python3 -I - <<'PYCODE'
-          import json, os
-          from pathlib import Path
-          report = json.loads(Path(os.environ['REPORT']).read_text())
-          assert report['analysis'] == os.environ['ANALYSIS']
-          assert report['action']['reviewStatus'] == os.environ['REVIEW']
-          assert str(len(report['findings'])) == os.environ['FINDINGS']
-          assert str(report['action']['analysisExitCode']) == os.environ['ANALYSIS_EXIT']
-          assert (report.get('base') or '') == os.environ['BASE']
-          assert (report.get('head') or '') == os.environ['HEAD']
-          assert Path(os.environ['SUMMARY']).is_file()
-          print('WPC_PILOT_RESULT=' + json.dumps({'analysis': os.environ['ANALYSIS'],
-              'review': os.environ['REVIEW'], 'findings': int(os.environ['FINDINGS']),
-              'analysisExit': int(os.environ['ANALYSIS_EXIT']), 'base': os.environ['BASE'],
-              'head': os.environ['HEAD'], 'reportExists': True, 'summaryExists': True}))
-          PYCODE
+    - name: Checkout trusted base
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        ref: ${{ github.event.pull_request.base.sha }}
+        fetch-depth: 0
+        persist-credentials: false
+    - name: Fetch proposed head as data
+      env:
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+        EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+      run: '[[ "$PR_NUMBER" =~ ^[0-9]+$ ]]
+
+        [[ "$EXPECTED_HEAD" =~ ^[0-9a-f]{40}$ ]]
+
+        git fetch --no-tags origin "refs/pull/$PR_NUMBER/head:refs/remotes/origin/privilege-head"
+
+        test "$(git rev-parse refs/remotes/origin/privilege-head)" = "$EXPECTED_HEAD"
+
+        '
+    - name: Report configured changes (advisory)
+      id: privilege
+      uses: adi271213/workflow-privilege-check@bd50c23ab5e722413a3901eccc0aac5d2e13e02e
+      with:
+        mode: advisory
+    - name: Explain the result
+      if: always()
+      env:
+        STEP_OUTCOME: ${{ steps.privilege.outcome }}
+        ANALYSIS: ${{ steps.privilege.outputs.analysis-status }}
+        REVIEW: ${{ steps.privilege.outputs.review-status }}
+        FINDINGS: ${{ steps.privilege.outputs.finding-count }}
+        ANALYSIS_EXIT: ${{ steps.privilege.outputs.analysis-exit-code }}
+        REPORT: ${{ steps.privilege.outputs.report-path }}
+        SUMMARY: ${{ steps.privilege.outputs.summary-path }}
+        BASE: ${{ steps.privilege.outputs.base-sha }}
+        HEAD: ${{ steps.privilege.outputs.head-sha }}
+      run: "if [[ \"$STEP_OUTCOME\" != success ]]; then\n  echo '::error::The Action did not finish reporting. No clean analysis\
+        \ was established; inspect the failed step.'\n  exit 1\nfi\nprintf 'Analysis: %s; review: %s; findings: %s; analysis\
+        \ exit: %s\\n' \"$ANALYSIS\" \"$REVIEW\" \"$FINDINGS\" \"$ANALYSIS_EXIT\"\ncase \"$ANALYSIS/$REVIEW\" in\n  complete/none)\
+        \ echo '::notice::No supported configured privilege expansions detected. This is not approval to merge.' ;;\n  complete/suggested|incomplete/suggested|error/suggested)\
+        \ echo '::notice::Human review suggested for the reported configured changes. Read the summary, including any analysis\
+        \ limitations.' ;;\n  incomplete/unknown) echo '::warning::Analysis is incomplete. This is not a clean result; review\
+        \ the summary and missing context.' ;;\n  error/unknown) echo '::warning::Analysis failed. This is not a clean result;\
+        \ review the summary and logs.' ;;\n  *) echo '::error::Unexpected or missing Action outputs. No clean result was\
+        \ established.'; exit 1 ;;\nesac\npython3 -I - <<'PYCODE'\nimport json, os\nfrom pathlib import Path\nreport = json.loads(Path(os.environ['REPORT']).read_text())\n\
+        assert report['analysis'] == os.environ['ANALYSIS']\nassert report['action']['reviewStatus'] == os.environ['REVIEW']\n\
+        assert str(len(report['findings'])) == os.environ['FINDINGS']\nassert str(report['action']['analysisExitCode']) ==\
+        \ os.environ['ANALYSIS_EXIT']\nassert (report.get('base') or '') == os.environ['BASE']\nassert (report.get('head')\
+        \ or '') == os.environ['HEAD']\nassert Path(os.environ['SUMMARY']).is_file()\nprint('WPC_PILOT_RESULT=' + json.dumps({'analysis':\
+        \ os.environ['ANALYSIS'],\n    'review': os.environ['REVIEW'], 'findings': int(os.environ['FINDINGS']),\n    'analysisExit':\
+        \ int(os.environ['ANALYSIS_EXIT']), 'base': os.environ['BASE'],\n    'head': os.environ['HEAD'], 'reportExists': True,\
+        \ 'summaryExists': True}))\nPYCODE\n"
+    - name: Run candidate in require-complete mode
+      id: strict
+      continue-on-error: true
+      uses: adi271213/workflow-privilege-check@bd50c23ab5e722413a3901eccc0aac5d2e13e02e
+      with:
+        mode: require-complete
+    - name: Assert alias cases in both modes
+      if: always()
+      env:
+        EXPECTATIONS: '{"alias-neutral": {"analysis": "complete", "review": "none", "rules": []}, "alias-token": {"analysis":
+          "complete", "review": "suggested", "rules": ["WF001", "WF001"]}, "alias-runner": {"analysis": "complete", "review":
+          "suggested", "rules": ["WF005", "WF005"]}, "alias-environment": {"analysis": "complete", "review": "suggested",
+          "rules": ["WF007", "WF007"]}, "alias-dynamic-secret": {"analysis": "incomplete", "review": "suggested", "rules":
+          ["WF004", "WF004"]}, "alias-cycle": {"analysis": "error", "review": "unknown", "rules": []}, "labels-correlation":
+          {"analysis": "complete", "review": "suggested", "rules": ["WF005"]}, "groups-correlation": {"analysis": "complete",
+          "review": "suggested", "rules": ["WF005"]}, "equivalent-targets": {"analysis": "complete", "review": "none", "rules":
+          []}, "literal-alternatives": {"analysis": "complete", "review": "suggested", "rules": ["WF005"]}, "hosted-label-update":
+          {"analysis": "complete", "review": "none", "rules": []}, "incomplete-with-token": {"analysis": "incomplete", "review":
+          "suggested", "rules": ["WF001"]}, "invalid-runner-with-token": {"analysis": "error", "review": "suggested", "rules":
+          ["WF001"]}}'
+        ADVISORY_STATE: ${{ steps.privilege.outputs.analysis-status }}
+        ADVISORY_REVIEW: ${{ steps.privilege.outputs.review-status }}
+        ADVISORY_COUNT: ${{ steps.privilege.outputs.finding-count }}
+        ADVISORY_EXIT: ${{ steps.privilege.outputs.analysis-exit-code }}
+        ADVISORY_REPORT: ${{ steps.privilege.outputs.report-path }}
+        ADVISORY_SUMMARY: ${{ steps.privilege.outputs.summary-path }}
+        ADVISORY_BASE: ${{ steps.privilege.outputs.base-sha }}
+        ADVISORY_HEAD: ${{ steps.privilege.outputs.head-sha }}
+        ADVISORY_OUTCOME: ${{ steps.privilege.outcome }}
+        STRICT_STATE: ${{ steps.strict.outputs.analysis-status }}
+        STRICT_REVIEW: ${{ steps.strict.outputs.review-status }}
+        STRICT_COUNT: ${{ steps.strict.outputs.finding-count }}
+        STRICT_EXIT: ${{ steps.strict.outputs.analysis-exit-code }}
+        STRICT_REPORT: ${{ steps.strict.outputs.report-path }}
+        STRICT_SUMMARY: ${{ steps.strict.outputs.summary-path }}
+        STRICT_BASE: ${{ steps.strict.outputs.base-sha }}
+        STRICT_HEAD: ${{ steps.strict.outputs.head-sha }}
+        STRICT_OUTCOME: ${{ steps.strict.outcome }}
+      run: "python3 -I - <<'PYCODE'\nimport json,os\nfrom pathlib import Path\nfrom collections import Counter\ncase=os.environ['GITHUB_HEAD_REF'].split('/',1)[1]\n\
+        expected=json.loads(os.environ['EXPECTATIONS'])[case]\nfor prefix,mode in [('ADVISORY','advisory'),('STRICT','require-complete')]:\n\
+        \    env={k[len(prefix)+1:]:v for k,v in os.environ.items() if k.startswith(prefix+'_')}\n    code=0 if expected['analysis']=='complete'\
+        \ else 2\n    assert env['OUTCOME']==('failure' if mode=='require-complete' and code else 'success')\n    assert (env['STATE'],env['REVIEW'],int(env['COUNT']),int(env['EXIT']))==(expected['analysis'],expected['review'],len(expected['rules']),code)\n\
+        \    report=json.loads(Path(env['REPORT']).read_text())\n    assert report['analysis']==env['STATE'] and report['action']['reviewStatus']==env['REVIEW']\n\
+        \    assert Counter(f['rule'] for f in report['findings'])==Counter(expected['rules'])\n    assert (report.get('base')\
+        \ or '',report.get('head') or '')==(env['BASE'],env['HEAD'])\n    assert Path(env['SUMMARY']).is_file()\n    print('WPC_ALIAS_RESULT='+json.dumps({'case':case,'mode':mode,'analysis':env['STATE'],'review':env['REVIEW'],'findings':int(env['COUNT']),'analysisExit':int(env['EXIT']),'stepOutcome':env['OUTCOME'],'base':env['BASE'],'head':env['HEAD'],'rules':sorted(f['rule']\
+        \ for f in report['findings'])}))\nPYCODE\n"
+'on':
+  pull_request:
+    types:
+    - opened
+    - synchronize
+    - reopened

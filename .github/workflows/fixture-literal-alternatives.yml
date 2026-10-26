@@ -1,0 +1,9 @@
+'on': workflow_dispatch
+permissions: {}
+jobs:
+  test:
+    runs-on:
+    - self-hosted
+    - prod
+    steps:
+    - run: echo unused
