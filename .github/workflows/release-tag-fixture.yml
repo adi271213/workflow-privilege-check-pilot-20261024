@@ -1,0 +1,11 @@
+on: workflow_dispatch
+permissions: {id-token: write}
+jobs:
+  first: &job
+    runs-on: [self-hosted, prod]
+    environment: production
+    steps:
+      - run: echo unused
+        env:
+          KEY: ${{ secrets.DEPLOY_KEY }}
+  second: *job
