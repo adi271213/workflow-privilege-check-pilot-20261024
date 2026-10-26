@@ -12,6 +12,6 @@ jobs:
       matrix:
         include:
         - pool: prod
-          arch: x64
-        - pool: test
           arch: arm64
+        - pool: test
+          arch: x64
