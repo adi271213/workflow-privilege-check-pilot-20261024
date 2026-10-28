@@ -1,0 +1,9 @@
+name: Unused fork known read grant
+on: workflow_dispatch
+permissions: {}
+jobs:
+  fixture:
+    permissions: {contents: read}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo fixture
