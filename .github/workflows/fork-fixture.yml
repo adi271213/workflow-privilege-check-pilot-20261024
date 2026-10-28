@@ -1,7 +1,5 @@
-name: Unused fork invalid fixture
+name: Unused fork incomplete fixture
 on: workflow_dispatch
-permissions: {}
-x-cycle: &loop [*loop]
 jobs:
   fixture:
     runs-on: ubuntu-latest
