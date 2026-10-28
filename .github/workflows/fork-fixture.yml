@@ -1,11 +1,7 @@
-name: Unused fork grant fixture
+name: Unused fork incomplete fixture
 on: workflow_dispatch
-permissions:
-  contents: write
-  id-token: write
 jobs:
   fixture:
-    runs-on: [self-hosted, fork-test]
-    environment: fork-test
+    runs-on: ubuntu-latest
     steps:
-      - run: echo "${{ secrets.FORK_TEST_TOKEN }}"
+      - run: echo fixture
