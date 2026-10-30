@@ -1,4 +1,15 @@
 on: workflow_dispatch
 permissions: {}
-jobs: &cycle
-  loop: *cycle
+jobs:
+  deploy:
+    strategy:
+      matrix:
+        include:
+          - runner-name: ubuntu-latest
+            environment-name: staging
+          - runner-name: self-hosted
+            environment-name: production
+    runs-on: ${{ matrix.runner-name }}
+    environment: ${{ matrix.environment-name }}
+    steps:
+      - run: echo ${{ secrets[inputs.which] }} ${{ inputs.use-secrets }} ${{ secrets.DEPLOY_KEY }}
