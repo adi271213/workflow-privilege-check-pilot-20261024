@@ -1,0 +1,103 @@
+{
+  "swap": {
+    "path": ".github/workflows/fixture-swap.yml",
+    "analysis": "complete",
+    "review": "suggested",
+    "rules": [
+      "WF008"
+    ],
+    "fileHashes": {
+      ".github/workflows/fixture-swap.yml": "152222d5935a8d2e2989d757534c12094b3589d702d4be21e2e8194719bc295d"
+    }
+  },
+  "exclude": {
+    "path": ".github/workflows/fixture-exclude.yml",
+    "analysis": "complete",
+    "review": "suggested",
+    "rules": [
+      "WF008"
+    ],
+    "fileHashes": {
+      ".github/workflows/fixture-exclude.yml": "e9ac82f3d9d27086891f95343459fc4e1c9fb0cf3d9ab3240c639dfe131c4a50"
+    }
+  },
+  "case-lookup": {
+    "path": ".github/workflows/fixture-case-lookup.yml",
+    "analysis": "complete",
+    "review": "suggested",
+    "rules": [
+      "WF008"
+    ],
+    "fileHashes": {
+      ".github/workflows/fixture-case-lookup.yml": "86526d79436eab827155ec14e1a51e9c55f9eb882f67d6758183610b5e341433"
+    }
+  },
+  "equivalent-unknown": {
+    "path": ".github/workflows/fixture-equivalent-unknown.yml",
+    "analysis": "complete",
+    "review": "none",
+    "rules": [],
+    "fileHashes": {
+      ".github/workflows/fixture-equivalent-unknown.yml": "afdf2791bef91146be64e4ac779c663a70f311126497c8e6aaf3482476f7872f"
+    }
+  },
+  "row-order": {
+    "path": ".github/workflows/fixture-row-order.yml",
+    "analysis": "complete",
+    "review": "none",
+    "rules": [],
+    "fileHashes": {
+      ".github/workflows/fixture-row-order.yml": "a3a07987ae99305cca10dcfc85052d116bcdeace60841eea21e8288d7bf8107c"
+    }
+  },
+  "hosted-update": {
+    "path": ".github/workflows/fixture-hosted-update.yml",
+    "analysis": "complete",
+    "review": "none",
+    "rules": [],
+    "fileHashes": {
+      ".github/workflows/fixture-hosted-update.yml": "298778accb2b54a5b916ef011d9ae8744bf6dc545e33c881f3e46b12853109c3"
+    }
+  },
+  "unresolved": {
+    "path": ".github/workflows/fixture-unresolved.yml",
+    "analysis": "incomplete",
+    "review": "unknown",
+    "rules": [],
+    "fileHashes": {
+      ".github/workflows/fixture-unresolved.yml": "40e9cb61af99d6a8306458ae1a30a16bab097553648fb8770e9d92ca616d663b"
+    }
+  },
+  "partial-known": {
+    "path": ".github/workflows/fixture-partial-known.yml",
+    "analysis": "incomplete",
+    "review": "suggested",
+    "rules": [
+      "WF008"
+    ],
+    "fileHashes": {
+      ".github/workflows/fixture-partial-known.yml": "1bdb53bd223144594802cd6e31d12f8b8d8d3b1289535eb9fd0029b021e1459a"
+    }
+  },
+  "error-known": {
+    "path": ".github/workflows/fixture-error-known.yml",
+    "analysis": "error",
+    "review": "suggested",
+    "rules": [
+      "WF008"
+    ],
+    "fileHashes": {
+      ".github/workflows/fixture-error-known.yml": "152222d5935a8d2e2989d757534c12094b3589d702d4be21e2e8194719bc295d",
+      ".github/workflows/broken-association.yml": "7d56daaddd101700d3a5a4cbb450607437a598418e83cba2991d9b6bb682d11e"
+    }
+  },
+  "error-unknown": {
+    "path": ".github/workflows/fixture-error-unknown.yml",
+    "analysis": "error",
+    "review": "unknown",
+    "rules": [],
+    "fileHashes": {
+      ".github/workflows/fixture-error-unknown.yml": "b80706b59d2cf9d0977d94dca29d8f738278f60e7201781af96a5400234f2427"
+    }
+  }
+}
