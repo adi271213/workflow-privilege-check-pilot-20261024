@@ -7,9 +7,9 @@ jobs:
     strategy:
       matrix:
         include:
-        - runner: ubuntu-24.04
+        - runner: ubuntu-22.04
           target: production
-        - runner: ubuntu-24.04
+        - runner: ubuntu-22.04
           target: staging
     steps:
     - run: echo fixture
