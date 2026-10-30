@@ -5,10 +5,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - runner-name: ubuntu-latest
-            environment-name: staging
-          - runner-name: self-hosted
+          - runner-name: {name: ubuntu-latest}
             environment-name: production
+          - runner-name: self-hosted
+            environment-name: staging
     runs-on: ${{ matrix.runner-name }}
     environment: ${{ matrix.environment-name }}
     steps:
