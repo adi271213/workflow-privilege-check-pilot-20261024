@@ -12,4 +12,4 @@ jobs:
     runs-on: ${{ matrix.runner-name }}
     environment: ${{ matrix.environment-name }}
     steps:
-      - run: echo ${{ inputs.use-secrets }}
+      - run: echo ${{ inputs.other-secrets }}
