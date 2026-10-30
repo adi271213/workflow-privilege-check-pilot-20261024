@@ -8,8 +8,8 @@ jobs:
       matrix:
         include:
         - runner: ubuntu-latest
-          target: staging
-        - runner: self-hosted
           target: production
+        - runner: self-hosted
+          target: staging
     steps:
     - run: echo fixture
