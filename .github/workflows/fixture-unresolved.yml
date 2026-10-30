@@ -2,7 +2,7 @@
 permissions: {}
 jobs:
   deploy:
-    runs-on: ${{ matrix.alternate }}
+    runs-on: ${{ matrix.runner }}
     environment: ${{ vars.TARGET }}
     strategy:
       matrix:
