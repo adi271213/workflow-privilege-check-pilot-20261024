@@ -2,7 +2,10 @@
 permissions: {}
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on:
+      labels:
+      - SELF-HOSTED
+      - self-hosted
     environment: ${{ vars.TARGET }}
     strategy:
       matrix:
