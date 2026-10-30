@@ -12,4 +12,4 @@ jobs:
     runs-on: ${{ matrix.runner }}
     environment: ${{ matrix.target }}
     steps:
-      - run: echo synthetic fixture
+      - run: echo neutral fixture
