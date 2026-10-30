@@ -7,9 +7,13 @@ jobs:
     strategy:
       matrix:
         include:
-        - runner: ubuntu-latest
-          target: production
-        - runner: self-hosted
+        - &id002
+          runner: self-hosted
           target: staging
+        - &id001
+          runner: ubuntu-latest
+          target: production
+        - *id001
+        - *id002
     steps:
     - run: echo fixture
