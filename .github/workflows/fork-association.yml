@@ -1,15 +1,19 @@
-on: workflow_dispatch
+'on': workflow_dispatch
 permissions: {}
 jobs:
   deploy:
     strategy:
       matrix:
         include:
-          - runner: ubuntu-latest
-            target: staging
-          - runner: self-hosted
-            target: production
+        - runner: ubuntu-latest
+          target: staging
+        - runner: self-hosted
+          target: production
     runs-on: ${{ matrix.runner }}
     environment: ${{ matrix.target }}
     steps:
-      - run: echo ${{ secrets[inputs.which] }}
+    - run: echo synthetic fixture
+  invalid:
+    runs-on: 42
+    steps:
+    - run: echo unused
