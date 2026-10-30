@@ -1,15 +1,19 @@
-on: workflow_dispatch
+'on': workflow_dispatch
 permissions: {}
 jobs:
   deploy:
     strategy:
       matrix:
         include:
-          - runner-name: ubuntu-latest
-            environment-name: staging
-          - runner-name: self-hosted
-            environment-name: production
+        - runner-name: ubuntu-latest
+          environment-name: staging
+        - runner-name: self-hosted
+          environment-name: production
     runs-on: ${{ matrix.runner-name }}
     environment: ${{ matrix.environment-name }}
     steps:
-      - run: echo ${{ secrets[inputs.which] }} ${{ inputs.use-secrets }} ${{ secrets.DEPLOY_KEY }}
+    - run: echo ${{ inputs.use-secrets }} ${{ secrets.DEPLOY_KEY }}
+  invalid:
+    runs-on: 42
+    steps:
+    - run: echo unused
